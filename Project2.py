@@ -86,7 +86,17 @@ def get_book_summary(book_url):
     Make sure to strip() any newlines from the book title and number of pages.
     """
 
-    pass
+    resp = requests.get(book_url)
+    soup = BeautifulSoup(resp.text, "html.parser")
+
+    booktitle = soup.find('h1', class_= "gr-h1 gr-h1--serif")
+    author = soup.find('a', class_= "authorName")
+    pages = soup.find('span', itemprop = 'numberOfPages')
+
+    tup = (booktitle.text.strip(), author.text.strip(), pages.text.strip())
+
+    return tup
+
 
 
 def summarize_best_books(filepath):
