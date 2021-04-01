@@ -157,7 +157,14 @@ def write_csv(data, filename):
 
     This function should not return anything.
     """
-    pass
+    headers = ['Book Title, Author Name']
+    with open(filename, "w") as file:
+        write = csv.writer(file, delimiter = ',', quotechar= '"')
+        write.writerow(headers)
+
+        for x in data:
+            write.writerow(x)
+
 
 
 def extra_credit(filepath):
@@ -243,23 +250,28 @@ class TestCases(unittest.TestCase):
         self.assertEqual(bestbooks[-1][2], 'https://www.goodreads.com/choiceawards/best-picture-books-2020')
       
 
-    #def test_write_csv(self):
+    def test_write_csv(self):
         # call get_titles_from_search_results on search_results.htm and save the result to a variable
-
+        writingfile = get_titles_from_search_results("search_results.htm")
         # call write csv on the variable you saved and 'test.csv'
-
+        write_csv(writingfile, "test.csv")
         # read in the csv that you wrote (create a variable csv_lines - a list containing all the lines in the csv you just wrote to above)
-
+        csv_lines = []
+        with open("test.csv") as file:
+            csv_file = csv.reader(file)
+            for i_line in csv_file:
+                csv_lines.append(i_line)
 
         # check that there are 21 lines in the csv
-
+        self.assertEqual(len(csv_lines), 21)
         # check that the header row is correct
-
+        self.assertEqual(csv_lines[0], ['Book Title, Author Name'])
         # check that the next row is 'Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'
-
+        self.assertEqual(csv_lines[1], ['Harry Potter and the Deathly Hallows (Harry Potter, #7)', 'J.K. Rowling'])
         # check that the last row is 'Harry Potter: The Prequel (Harry Potter, #0.5)', 'J.K. Rowling'
+        self.assertEqual(csv_lines[-1], ['Harry Potter: The Prequel (Harry Potter, #0.5)', 'Julian Harrison (Introduction)'])
 
-
+        #this test case was changed as there is no book here by Rowling with this title
 
 if __name__ == '__main__':
     print(extra_credit("extra_credit.htm"))
