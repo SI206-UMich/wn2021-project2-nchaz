@@ -118,30 +118,27 @@ def summarize_best_books(filepath):
     booktitles_list = []
     url_list = []
     categories = soup.find_all("h4", class_ = "category__copy")
-    booktitles = soup.find_all("div", class_= "category__winnerImageContainer")
-    #url = soup.find_all("a", href)
+    booktitles = soup.find_all("img", class_= "category__winnerImage")
+    urls = soup.find_all("div", class_= "category clearFix")
 
     for category in categories:
         category = category.text.strip()
         categories_list.append(category)
 
-    for booktitle in booktitles_list:
-        booktitle = booktitle.text.strip()
-        booktitles_list.append(booktitle)
+    for booktitle in booktitles:
+        booktitles_list.append(booktitle.get("alt", None))
+
+    for url in urls:
+        url_list.append(url.find('a')['href'])
 
     length = len(category)
 
     full_list = []
     for x in range(length):
-        tup = categories_list[x], booktitles_list[x]
+        tup = (categories_list[x], booktitles_list[x], url_list[x])
         full_list.append(tup)
 
-    print(full_list)
-
     return full_list
-
-
-summarize_best_books("best_books_2020.htm")
 
 def write_csv(data, filename):
     """
