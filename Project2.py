@@ -97,8 +97,6 @@ def get_book_summary(book_url):
 
     return tup
 
-
-
 def summarize_best_books(filepath):
     """
     Write a function to get a list of categories, book title and URLs from the "BEST BOOKS OF 2020"
@@ -110,8 +108,40 @@ def summarize_best_books(filepath):
     ("Fiction", "The Testaments (The Handmaid's Tale, #2)", "https://www.goodreads.com/choiceawards/best-fiction-books-2020") 
     to your list of tuples.
     """
-    pass
+    file = open(filepath, "r")
+    read = file.read()
+    soup = BeautifulSoup(read, "html.parser")
+    
+    file.close()
 
+    categories_list = []
+    booktitles_list = []
+    url_list = []
+    categories = soup.find_all("h4", class_ = "category__copy")
+    booktitles = soup.find_all("div", class_= "category__winnerImageContainer")
+    #url = soup.find_all("a", href)
+
+    for category in categories:
+        category = category.text.strip()
+        categories_list.append(category)
+
+    for booktitle in booktitles_list:
+        booktitle = booktitle.text.strip()
+        booktitles_list.append(booktitle)
+
+    length = len(category)
+
+    full_list = []
+    for x in range(length):
+        tup = categories_list[x], booktitles_list[x]
+        full_list.append(tup)
+
+    print(full_list)
+
+    return full_list
+
+
+summarize_best_books("best_books_2020.htm")
 
 def write_csv(data, filename):
     """
